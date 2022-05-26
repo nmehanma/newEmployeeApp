@@ -39,11 +39,11 @@ app.post("/send-data", (req, res) => {
     phone: req.body.phone,
     salary: req.body.salary,
     position: req.body.position,
-    picture: req.body.picture
+    picture: req.body.picture,
   });
   employee
     .save()
-    .then(data => {
+    .then((data) => {
       console.log(data);
       res.send("success");
     })
@@ -51,6 +51,35 @@ app.post("/send-data", (req, res) => {
       console.log(err);
     });
   // res.send("posted");
+});
+
+app.post("/delete", (req, res) => {
+  Employee.findByIdAndRemove(req.body.id)
+    .then((data) => {
+      console.log(data);
+      res.send("deleted");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+app.post("/update", (req, res) => {
+  Employee.findByIdAndUpdate(req.body.id, {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    salary: req.body.salary,
+    position: req.body.position,
+    picture: req.body.picture,
+  })
+    .then((data) => {
+      console.log(data);
+      res.send("success")
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.listen(3000, () => {
