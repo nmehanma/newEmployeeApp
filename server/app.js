@@ -7,12 +7,13 @@ require("dotenv").config();
 
 require("./Employee");
 
+app.use(bodyParser.json());
+
 const dbUrl = process.env.DB_URL;
 
 const Employee = mongoose.model("employee");
 
 mongoose.connect(dbUrl, {
-
   useNewURLParser: true,
   useUnifiedtopology: true,
 });
@@ -28,6 +29,28 @@ mongoose.connection.on("error", (err) => {
 
 app.get("/", (req, res) => {
   res.send("Welcome to app");
+});
+
+app.post("/send-data", (req, res) => {
+  // console.log(req.body)
+  const employee = new Employee({
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    salary: req.body.salary,
+    position: req.body.position,
+    picture: req.body.picture
+  });
+  employee
+    .save()
+    .then(data => {
+      console.log(data);
+      res.send("success");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  // res.send("posted");
 });
 
 app.listen(3000, () => {
