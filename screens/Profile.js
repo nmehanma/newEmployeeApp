@@ -1,15 +1,48 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Linking, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Linking,
+  Platform,
+  Alert,
+} from "react-native";
 import { Title, Card, Button } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import profilePicture from "../assets/profile.png";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
+import { BASE_URL } from "@env";
+
+console.log(BASE_URL);
 // import { theme } from "./CreateEmployee";
 
 const Profile = (props) => {
   const { _id, name, picture, phone, salary, email, position } =
     props.route.params.item;
-    // console.log(props.route.params.item.picture)
+  // console.log(props.route.params.item.picture)
+
+  console.log(_id);
+
+  const deleteEmployee = () => {
+    fetch(`${BASE_URL}/delete`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: _id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((deletedEmp) => {
+        Alert.alert(`${deletedEmp.name} deleted`)
+        props.navigation.navigate("Home");
+      })
+      .catch((err) => {
+        Alert.alert("something went wrong with delete");
+      });
+  };
   const openDial = () => {
     if (Platform.OS === "android") {
       Linking.openURL(`tel:${12345}`);
@@ -26,7 +59,7 @@ const Profile = (props) => {
       <View style={{ alignItems: "center" }}>
         <Image
           style={{ width: 140, height: 140, borderRadius: 70, marginTop: -50 }}
-          source={{uri:picture}}
+          source={{ uri: picture }}
         />
       </View>
       <View style={{ alignItems: "center", margin: 15 }}>
@@ -87,7 +120,7 @@ const Profile = (props) => {
           icon="delete"
           theme={theme}
           mode="contained"
-          onPress={() => console.log("Pressed")}
+          onPress={() => deleteEmployee()}
         >
           Dismiss
         </Button>

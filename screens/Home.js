@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Image, FlatList, Alert } from "react-native";
 import { BASE_URL } from "@env";
 
+
 console.log(BASE_URL)
 
 import { ActivityIndicator, Card, FAB } from "react-native-paper";
