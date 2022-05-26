@@ -1,49 +1,30 @@
-import React from "react";
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, FlatList, Alert } from "react-native";
+import { BASE_URL } from "@env";
 
-import { Card, FAB } from "react-native-paper";
+console.log(BASE_URL)
+
+import { ActivityIndicator, Card, FAB } from "react-native-paper";
 
 import profileImage from "../assets/profile.png";
 
 const Home = ({ navigation }) => {
-  const data = [
-    {
-      id: 1,
-      name: "najeam",
-      email: "abc@abc.com",
-      salary: "50 000",
-      phone: "123",
-      position: "web dev",
-      picture: profileImage,
-    },
-    {
-      id: 2,
-      name: "suresh",
-      email: "back@abc.com",
-      salary: "60 000",
-      phone: "456",
-      position: "App dev",
-      picture: profileImage,
-    },
-    {
-      id: 3,
-      name: "ramesh",
-      email: "ramesh@abc.com",
-      salary: "70 000",
-      phone: "789",
-      position: "Soft dev",
-      picture: profileImage,
-    },
-    {
-      id: 4,
-      name: "hitesh",
-      email: "hitesh@abc.com",
-      salary: "80 000",
-      phone: "135",
-      position: "web dev",
-      picture: profileImage,
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = () => {
+    fetch("https://7e5b-99-250-161-7.ngrok.io/")
+      .then((res) => res.json())
+      .then((results) => {
+        setData(results), setLoading(false);
+      })
+      .catch((err) => {
+        Alert.alert("something went wrong");
+      });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const renderList = (item) => {
     return (
@@ -55,7 +36,7 @@ const Home = ({ navigation }) => {
         <View style={styles.cardView}>
           <Image
             style={{ width: 60, height: 60, borderRadius: 30 }}
-            source={profileImage}
+            source={{ uri: item.picture }}
           />
           <View style={{ marginLeft: 10 }}>
             <Text style={styles.text}>{item.name}</Text>
@@ -73,6 +54,11 @@ const Home = ({ navigation }) => {
         renderItem={({ item }) => {
           return renderList(item);
         }}
+        keyExtractor={(item) => item._id}
+        onRefresh={() => {
+          fetchData();
+        }}
+        refreshing={loading}
       />
       <FAB
         onPress={() => navigation.navigate("Create")}

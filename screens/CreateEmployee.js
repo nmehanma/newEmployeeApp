@@ -1,14 +1,22 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Modal, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Alert,
+  KeyboardAvoidingView,
+} from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 // import * as Permissions from "expo-permissions";
-// import { BASE_URL } from "@env";
+import { BASE_URL } from "@env";
 
-const KEY = process.env.BASE_URL
-console.log(KEY);
+// const KEY = process.env.BASE_URL;
+// console.log(BASE_URL);
+// console.log(BASE_URL);
 
-const CreateEmployee = () => {
+const CreateEmployee = ({ navigation }) => {
   const [name, setName] = useState(""); //1st parameter is the parameter to be changed by second parameter
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -19,7 +27,7 @@ const CreateEmployee = () => {
   // const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
   const submitData = () => {
-    fetch(`${KEY}/send-data`, {
+    fetch(`${{BASE_URL}}`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +43,11 @@ const CreateEmployee = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        Alert.alert(`${data.name} is saved successfully`);
+        navigation.navigate("Home");
+      })
+      .catch((err) => {
+        Alert.alert("error saving");
       });
   };
 
@@ -98,11 +110,14 @@ const CreateEmployee = () => {
         console.log(data);
         setPicture(data.url);
         setModal(false);
+      })
+      .catch((err) => {
+        Alert.alert("error while image is uploading");
       });
   };
 
   return (
-    <View style={StyleSheet.root}>
+    <View style={styles.root}>
       <TextInput
         label="Name"
         style={styles.inputStyle}
@@ -121,6 +136,7 @@ const CreateEmployee = () => {
       />
       <TextInput
         label="phone"
+        keyboardType="numeric"
         style={styles.inputStyle}
         value={phone}
         theme={theme}
@@ -129,6 +145,7 @@ const CreateEmployee = () => {
       />
       <TextInput
         label="salary"
+        keyboardType="numeric"
         style={styles.inputStyle}
         value={salary}
         theme={theme}

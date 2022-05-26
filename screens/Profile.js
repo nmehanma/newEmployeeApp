@@ -2,18 +2,19 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Linking, Platform } from "react-native";
 import { Title, Card, Button } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
-// import profilePicture from "../assets/profile.png";
+import profilePicture from "../assets/profile.png";
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
 // import { theme } from "./CreateEmployee";
 
 const Profile = (props) => {
-  const { id, name, picture, phone, salary, email, position } =
+  const { _id, name, picture, phone, salary, email, position } =
     props.route.params.item;
+    // console.log(props.route.params.item.picture)
   const openDial = () => {
     if (Platform.OS === "android") {
-      Linking.openURL("tel:12345");
+      Linking.openURL(`tel:${12345}`);
     } else {
-      Linking.openURL("telprompt:12345");
+      Linking.openURL(`telprompt:${12345}`);
     }
   };
   return (
@@ -25,7 +26,7 @@ const Profile = (props) => {
       <View style={{ alignItems: "center" }}>
         <Image
           style={{ width: 140, height: 140, borderRadius: 70, marginTop: -50 }}
-          source= {picture}
+          source={{uri:picture}}
         />
       </View>
       <View style={{ alignItems: "center", margin: 15 }}>
@@ -41,7 +42,7 @@ const Profile = (props) => {
       <Card
         style={styles.mycard}
         onPress={() => {
-          Linking.openURL("mailto:abc@abc.com");
+          Linking.openURL(`mailto:${email}`);
         }}
       >
         <View style={styles.cardContent}>
