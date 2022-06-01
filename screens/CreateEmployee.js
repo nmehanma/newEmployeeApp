@@ -13,7 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import { BASE_URL } from "@env";
 
 // const KEY = process.env.BASE_URL;
-// console.log(BASE_URL);
+console.log(BASE_URL);
 // console.log(BASE_URL);
 
 const CreateEmployee = ({ navigation }) => {
